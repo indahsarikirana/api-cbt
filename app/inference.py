@@ -1,2 +1,4 @@
 def preprocess_input(soal: str, jawaban: str) -> str:
-    return f"Soal: {soal} [SEP] Jawaban: {jawaban}"
+    soal = soal.lower()
+    jawaban = jawaban.lower()
+    return f"{soal} {jawaban}"

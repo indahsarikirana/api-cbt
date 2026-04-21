@@ -12,15 +12,14 @@ class ModelService:
         print("🔄 Loading IndoBERT...")
 
         self.tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            MODEL_PATH
-        )
+        self.model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
 
         self.model.to(DEVICE)
         self.model.eval()
 
         print("✅ Model ready!")
+        print("num_labels:", self.model.config.num_labels)
+        print("problem_type:", self.model.config.problem_type)
 
     def predict(self, text: str) -> float:
         inputs = self.tokenizer(
@@ -37,14 +36,9 @@ class ModelService:
             outputs = self.model(**inputs)
             logits = outputs.logits
 
-        # Ambil nilai skor
         score = logits.squeeze().item()
-
-        score = torch.sigmoid(torch.tensor(score)).item()
-        score = score * 100
-
+        score = score * 10
         return float(score)
 
 
-# global object (penting biar tidak load berulang)
 model_service = ModelService()
